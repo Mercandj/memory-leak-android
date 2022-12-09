@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
             val listeners = HashSet<Listener>()
 
+            @Suppress("unused")
             fun interface Listener {
                 fun onChanged()
             }
