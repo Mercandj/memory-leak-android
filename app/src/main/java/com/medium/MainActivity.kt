@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private val searchListener = SearchManager.Listener {
-        Log.d("memory_leak", "use largeObject to avoid compiler opti $largeObject")
+    private val listener = Manager.Listener {
+        Log.d("memory_leak", "Use largeObject to avoid compiler opti $largeObject")
     }
     private var largeObject: Any? = null
 
@@ -17,22 +17,22 @@ class MainActivity : AppCompatActivity() {
         largeObject = (0..4_000).map {
             Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
         }
-
-        searchManager.listeners.add(searchListener) // Leak without listeners.removeListener on onDestroy()
-        Log.d("jm/debug", "size: " + searchManager.listeners.size)
+        manager.listeners.add(listener) // Leak without onDestroy() remove
+        Log.d("memory_leak", "size: " + manager.listeners.size)
     }
 
     companion object {
 
         @JvmStatic
-        private val searchManager = SearchManager()
+        private val manager = Manager()
 
-        private class SearchManager {
+        private class Manager {
 
             val listeners = HashSet<Listener>()
 
             @Suppress("unused")
             fun interface Listener {
+
                 fun onChanged()
             }
         }
