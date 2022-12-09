@@ -10,12 +10,14 @@ class MainActivity : AppCompatActivity() {
     private val searchListener = SearchManager.Listener {
         Log.d("memory_leak", "use largeObject to avoid compiler opti $largeObject")
     }
-    private val largeObject = (0..2_000).map {
-        Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
-    }
+    private var largeObject: Any? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        largeObject = (0..4_000).map {
+            Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
+        }
+
         searchManager.listeners.add(searchListener) // Leak without listeners.removeListener on onDestroy()
         Log.d("jm/debug", "size: " + searchManager.listeners.size)
     }
